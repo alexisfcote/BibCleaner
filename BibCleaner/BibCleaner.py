@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #------------------------------------------------------------------------------
 # Name:        CleanBib
 # Purpose: Remove unwanted keys from a .bib file
@@ -25,7 +26,7 @@ import os
 import sys
 from PyQt4.QtGui import QApplication, QMainWindow, QMessageBox
 from PyQt4 import QtCore, QtGui
-from uiBibCleaner import Ui_main
+from BibCleaner.uiBibCleaner import Ui_main
 
 
 

@@ -1,19 +1,21 @@
 from setuptools import setup, find_packages
 import os
 
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+
 setup(
-    name = 'bibCleaner',
-    packages = find_packages(),
-    version = '0.1',
-    description = 'bibtex file cleaner',
+    name='bibCleaner',
+    packages=find_packages(),
+    version='0.2',
+    description='bibtex file cleaner',
     author='Alexis Fortin-Côté',
     author_email='alexisfcote@gmail.com',
     long_description=read('README.txt'),
     url='https://pypi.python.org/pypi',
-    keywords = "bibtex latex bib clean",
+    keywords="bibtex latex bib clean",
     license='GPLv3',
     classifiers=[
         'Environment :: X11 Applications :: Qt',
@@ -24,10 +26,10 @@ setup(
         'Programming Language :: Python',
         'Topic :: Utilities'
     ],
-    install_requires = ['PyQt4'],
+    install_requires=['PyQt4'],
     entry_points={
-    'console_scripts': [
-        'BibCleaner=BibCleaner:main',
-    ],
+        'console_scripts': [
+            'BibCleaner=BibCleaner:main',
+        ],
     },
 )

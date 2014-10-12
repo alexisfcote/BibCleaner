@@ -57,3 +57,11 @@ target/
 Default
 config
 
+#PyCharm IDE
+.idea/
+
+#test folder
+test/
+
+#Vim
+*.swap

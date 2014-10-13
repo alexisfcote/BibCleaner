@@ -30,6 +30,7 @@ from uiBibCleaner import Ui_main
 
 
 def cleandict(file, customdict=None):
+    # Function that removes lines from a given file for which the starting word is contained in the passed dict
     if not customdict:
         customdict = {}
     try:
@@ -105,6 +106,7 @@ class Startui(QMainWindow):
             self.refresh()
 
     def uiclean(self):
+        # Verifies if the file exist and then call the cleandict funtion
         self.update_checkbox()
         if os.path.isfile(self.fname):
             cleandict(self.fname, self.cles)
@@ -118,6 +120,7 @@ class Startui(QMainWindow):
             msgbox.exec_()
 
     def refresh(self):
+        # refresh and load the file and chekboxes
         newcles = dict()
         with open(self.fname, 'r') as f:
             self.ui.textEdit_bibtex.setText(f.read())  # on rempli le textbox avec le fichier
@@ -153,6 +156,7 @@ class Startui(QMainWindow):
             i += 1
 
     def update_checkbox(self):
+        # update the dictionary with new checked box
         i = 0
         for cb in self.ui.cblist:
             if cb.checkState():
@@ -161,6 +165,7 @@ class Startui(QMainWindow):
 
     @staticmethod
     def load_default():
+        # Load the file containing the default checked box
         try:
             f = open('Default', 'r')
         except IOError:
@@ -177,11 +182,13 @@ class Startui(QMainWindow):
 
 
 def main():
+    """
+    Launch the GUI and the app
+    """
     app = QApplication(sys.argv)
     myapp = Startui()
     myapp.show()
     sys.exit(app.exec_())
-    #    clean('My Collection.bib')
 
 
 if __name__ == '__main__':

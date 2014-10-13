@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Name:        CleanBib
 # Purpose: Remove unwanted keys from a .bib file
 #
@@ -29,22 +29,23 @@ from PyQt4 import QtCore, QtGui
 from uiBibCleaner import Ui_main
 
 
-
-
-def cleanDict(file, customDict=dict()):
+def cleandict(file, customdict=None):
+    if not customdict:
+        customdict = {}
     try:
         with open(file) as f:
-            newf = open(file+'new','w')
+            newf = open(file + 'new', 'w')
+            lastat = []
             for line in f:
-                if line[0]=='@':
-                    lastAt = re.findall('@\w+',line)[0]
+                if line[0] == '@':
+                    lastat = re.findall("@\w+", line)[0]
 
-                found = re.findall('\w+\ =',line) # on trouve la clés
+                found = re.findall("\w+=", line)  # on trouve la clés
                 if found:
-                    cle = found[0].replace(' ', '')[:-1] # on enleve le = et l'espace
+                    cle = found[0].replace(' ', '')[:-1]  # on enleve le = et l'espace
                     # si la cle dans customDict est à 1 et que ce n'est pas pour un type @misc on enlève
-                    if customDict[cle] and not(lastAt == '@misc'):
-                        print('removed : '+line)
+                    if customdict[cle] and not (lastat == '@misc'):
+                        print('removed : ' + line)
                     else:
                         newf.write(line)
                 else:
@@ -53,9 +54,10 @@ def cleanDict(file, customDict=dict()):
         newf.close()
         f.close()
         os.remove(file)
-        os.renames(file+'new',file)
+        os.renames(file + 'new', file)
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
+
 
 class Startui(QMainWindow):
     def __init__(self, parent=None):
@@ -72,7 +74,7 @@ class Startui(QMainWindow):
         self.ui.cblist = []
 
         # Charge les checkbox cochés par défaut
-        default = self.load_Default()
+        default = self.load_default()
         self.cles = dict()
         for cle in default:
             self.cles[cle] = 1
@@ -88,45 +90,44 @@ class Startui(QMainWindow):
             print('No recent file')
             pass
 
-
         #Connection
-        QtCore.QObject.connect(self.ui.pushButton_load,QtCore.SIGNAL("clicked()"), self.file_dialog)
-        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.uiClean)
+        QtCore.QObject.connect(self.ui.pushButton_load, QtCore.SIGNAL("clicked()"), self.file_dialog)
+        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.uiclean)
         #QtCore.QObject.connect(self.ui.buttonBox,QtCore.SIGNAL('clicked (QAbstractButton*)'), self.uiClean)
 
-
     def file_dialog(self):
-        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file','~')
+        dia = QtGui.QFileDialog()
+        self.fname = QtGui.QFileDialog.getOpenFileName(dia, 'Open file', '~')
         with open('config', 'w+') as f:
             f.write(self.fname)
 
         if os.path.isfile(self.fname):
             self.refresh()
 
-    def uiClean(self):
+    def uiclean(self):
         self.update_checkbox()
         if os.path.isfile(self.fname):
-            cleanDict(self.fname, self.cles)
+            cleandict(self.fname, self.cles)
             print('Cleaned')
             self.refresh()
         else:
-            msgBox = QMessageBox();
-            msgBox.setWindowTitle('CleanBib');
-            msgBox.setText("Invalid file selected.");
-            msgBox.setIcon(QMessageBox.Warning);
-            msgBox.exec_();
+            msgbox = QMessageBox()
+            msgbox.setWindowTitle('CleanBib')
+            msgbox.setText("Invalid file selected.")
+            msgbox.setIcon(QMessageBox.Warning)
+            msgbox.exec_()
 
     def refresh(self):
         newcles = dict()
         with open(self.fname, 'r') as f:
-            self.ui.textEdit_bibtex.setText(f.read()) # on rempli le textbox avec le fichier
+            self.ui.textEdit_bibtex.setText(f.read())  # on rempli le textbox avec le fichier
             f.seek(0)
             for line in f:
                 # on ajoute les clés manquant dans le dictionnaire
-                if not line[0]=='@':
-                    found = re.findall('\w+\ =',line) # on trouve les clés
+                if not line[0] == '@':
+                    found = re.findall('\w+ =', line)  # on trouve les clés
                     if found:
-                        cle = found[0].replace(' ', '')[:-1] # on enleve le = et l'espace
+                        cle = found[0].replace(' ', '')[:-1]  # on enleve le = et l'espace
                         if not cle in newcles:
                             newcles[cle] = 0
         # on ajoute les nouvelles cles et on reprend conserve les anciennes si elles existents toujours
@@ -140,8 +141,8 @@ class Startui(QMainWindow):
         for checkbox in self.ui.cblist:
             checkbox.deleteLater()
 
-        self.ui.cblist = [];
-        i=0
+        self.ui.cblist = []
+        i = 0
         # on crée les checkboxes des cles trouvés
         for cle in sorted(self.cles):
             self.ui.cblist.append(QtGui.QCheckBox(cle, self.ui.groupBox_custom))
@@ -149,18 +150,17 @@ class Startui(QMainWindow):
             if self.cles[cle]:
                 self.ui.cblist[i].setChecked(True)
             self.ui.verticalLayout_3.addWidget(self.ui.cblist[i])
-            i = i+1
-
+            i += 1
 
     def update_checkbox(self):
-        i=0
+        i = 0
         for cb in self.ui.cblist:
             if cb.checkState():
                 self.cles[cb.objectName()] = 1
-            i=i+1
+            i += 1
 
     @staticmethod
-    def load_Default():
+    def load_default():
         try:
             f = open('Default', 'r')
         except IOError:
@@ -168,19 +168,12 @@ class Startui(QMainWindow):
             f.write('url\nisbn\nissn\nfile\ndoi\nabstract\nurldate')
             f.seek(0, 0)
 
-        list = []
+        list_default = []
         for line in f:
             if re.findall('\w+', line):
-                list.append(line.replace('\n', ''))
+                list_default.append(line.replace('\n', ''))
         f.close()
-        return list
-
-
-
-
-
-
-
+        return list_default
 
 
 def main():
@@ -189,6 +182,7 @@ def main():
     myapp.show()
     sys.exit(app.exec_())
     #    clean('My Collection.bib')
+
 
 if __name__ == '__main__':
     main()

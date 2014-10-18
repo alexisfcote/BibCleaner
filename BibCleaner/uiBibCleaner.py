@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './uiBibCleaner.ui'
 #
-# Created: Sun Oct  5 11:32:52 2014
+# Created: Sat Oct 18 18:40:09 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -54,7 +54,7 @@ class Ui_main(object):
         self.FileEdit.setSizePolicy(sizePolicy)
         self.FileEdit.setMinimumSize(QtCore.QSize(200, 0))
         self.FileEdit.setInputMask(_fromUtf8(""))
-        self.FileEdit.setReadOnly(True)
+        self.FileEdit.setReadOnly(False)
         self.FileEdit.setObjectName(_fromUtf8("FileEdit"))
         self.verticalLayout.addWidget(self.FileEdit)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()

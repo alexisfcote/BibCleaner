@@ -60,9 +60,9 @@ def cleandict(file, customdict=None):
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
 
 
-class Startui(QMainWindow):
+class CleanBibUi(QMainWindow):
     def __init__(self, parent=None):
-        # QT ui
+        """ QT ui """
         QMainWindow.__init__(self, parent)
         self.ui = Ui_main()
         self.setWindowTitle('Icon')
@@ -94,9 +94,15 @@ class Startui(QMainWindow):
         #Connection
         QtCore.QObject.connect(self.ui.pushButton_load, QtCore.SIGNAL("clicked()"), self.file_dialog)
         self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.uiclean)
-        #QtCore.QObject.connect(self.ui.buttonBox,QtCore.SIGNAL('clicked (QAbstractButton*)'), self.uiClean)
+        QtCore.QObject.connect(self.ui.FileEdit, QtCore.SIGNAL("returnPressed()"), self.typed_filename)
+
+    def typed_filename(self):
+        """ When changing filename from the textbox update self.fname """
+        self.fname = self.ui.FileEdit.text()
+        self.refresh()
 
     def file_dialog(self):
+        """Main Gui Program"""
         dia = QtGui.QFileDialog()
         self.fname = QtGui.QFileDialog.getOpenFileName(dia, 'Open file', '~')
         with open('config', 'w+') as f:
@@ -106,22 +112,31 @@ class Startui(QMainWindow):
             self.refresh()
 
     def uiclean(self):
-        # Verifies if the file exist and then call the cleandict funtion
+        """ Verifies if the file exist and then call the cleandict funtion """
         self.update_checkbox()
         if os.path.isfile(self.fname):
             cleandict(self.fname, self.cles)
             print('Cleaned')
             self.refresh()
         else:
-            msgbox = QMessageBox()
-            msgbox.setWindowTitle('CleanBib')
-            msgbox.setText("Invalid file selected.")
-            msgbox.setIcon(QMessageBox.Warning)
-            msgbox.exec_()
+            self.msg_box_missing_file()
+
+    @staticmethod
+    def msg_box_missing_file():
+        """ Display a message saying that the file is invalid"""
+        msgbox = QMessageBox()
+        msgbox.setWindowTitle('CleanBib')
+        msgbox.setText("Invalid file selected.")
+        msgbox.setIcon(QMessageBox.Warning)
+        msgbox.exec_()
 
     def refresh(self):
-        # refresh and load the file and chekboxes
+        """ refresh and load the file and chekboxes """
         newcles = dict()
+        if not os.path.isfile(self.fname):
+            self.msg_box_missing_file()
+            return
+
         with open(self.fname, 'r') as f:
             self.ui.textEdit_bibtex.setText(f.read())  # on rempli le textbox avec le fichier
             f.seek(0)
@@ -156,7 +171,7 @@ class Startui(QMainWindow):
             i += 1
 
     def update_checkbox(self):
-        # update the dictionary with new checked box
+        """ update the dictionary with new checked box"""
         i = 0
         for cb in self.ui.cblist:
             if cb.checkState():
@@ -165,7 +180,7 @@ class Startui(QMainWindow):
 
     @staticmethod
     def load_default():
-        # Load the file containing the default checked box
+        """ Load the file containing the default checked box """
         try:
             f = open('Default', 'r')
         except IOError:
@@ -186,7 +201,7 @@ def main():
     Launch the GUI and the app
     """
     app = QApplication(sys.argv)
-    myapp = Startui()
+    myapp = CleanBibUi()
     myapp.show()
     sys.exit(app.exec_())
 

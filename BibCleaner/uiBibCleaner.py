@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './uiBibCleaner.ui'
+# Form implementation generated from reading ui file '.\uiBibCleaner.ui'
 #
-# Created: Sat Oct 18 18:40:09 2014
-#      by: PyQt4 UI code generator 4.10.4
+# Created: Tue Oct 28 16:37:15 2014
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -91,7 +91,7 @@ class Ui_main(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 198, 336))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 198, 347))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.horizontalLayout_3 = QtGui.QHBoxLayout(self.scrollAreaWidgetContents)
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
@@ -125,12 +125,12 @@ class Ui_main(object):
         main.setTabOrder(self.FileEdit, self.pushButto_reload)
 
     def retranslateUi(self, main):
-        main.setWindowTitle(_translate("main", "MainWindow", None))
+        main.setWindowTitle(_translate("main", "BibCleaner", None))
         self.textEdit_bibtex.setHtml(_translate("main", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'MS Shell Dlg 2\'; font-size:8pt;\"><br /></p></body></html>", None))
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;\"><br /></p></body></html>", None))
         self.FileEdit.setPlaceholderText(_translate("main", "Location of the file", None))
         self.pushButto_reload.setText(_translate("main", "Reload", None))
         self.pushButton_load.setText(_translate("main", "Load", None))

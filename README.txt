@@ -10,10 +10,6 @@ BibClean will not delete entries under the @misc entries.
 You can manage the default entries to delete by adding the entry keys to the default file. This file will be created on first run of the program.
 
 -------------------------------------------------
-Installation :
--Make sure to install PyQt4 first
--run setup.py install
-
 Compilation :
-Make binaries with cx_freeze with the cxsetup.py
+Make binaries with cx_freeze with the cxsetup.py, e.g. python3 cxsetup.py build
 

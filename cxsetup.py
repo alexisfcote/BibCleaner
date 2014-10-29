@@ -24,4 +24,4 @@ setup(name="BibCleaner",
       url='https://github.com/alexisfcote/BibCleaner',
       long_description=read('README.txt'),
       options={"build_exe": build_exe_options},
-      executables=[Executable("BibCleaner.py", base=base)])
+      executables=[Executable("BibCleaner.py", base=base, icon="favicon.ico")])

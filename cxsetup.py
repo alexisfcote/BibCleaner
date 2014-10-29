@@ -7,7 +7,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 # Dependencies are automatically detected, but it might need fine tuning.
-build_exe_options = {"packages": ["BibCleaner"], "include_files": ["favicon.png"]} 
+build_exe_options = {"packages": ["BibCleaner"], "include_files": ["favicon.png", "COPYING.txt", "README.txt"]} 
 
 
 # GUI applications require a different base on Windows (the default is for a

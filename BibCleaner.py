@@ -8,7 +8,7 @@
 # Created:     25/09/2014
 # Copyright:   (c) Alexis Fortin-Cote 2014
 # Licence:
-#    This program is free software: you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    any later version.
@@ -26,26 +26,30 @@ import os
 import sys
 from PyQt4.QtGui import QApplication, QMainWindow, QMessageBox
 from PyQt4 import QtCore, QtGui
-import BibCleaner
 from uiBibCleaner import Ui_main
 
 
 def cleandict(file, customdict=None):
-    # Function that removes lines from a given file for which the starting word is contained in the passed dict
+    """ Function that removes lines from a given file for which the starting word is contained in the passed dict
+    :param file: Filename of the .bib to modify
+    :param customdict: Dictionary of the tags to remove
+    :return: none
+    """
     if not customdict:
         customdict = {}
     try:
-        with open(file) as f:
-            newf = open(file + 'new', 'w')
+        with open(file, encoding="utf-8") as f, open(file + 'new', 'w', encoding="utf-8") as newf:
             lastat = []
             for line in f:
                 if line[0] == '@':
                     lastat = re.findall("@\w+", line)[0]
 
-                found = re.findall("\w+=", line)  # on trouve la clés
+                found = re.findall("\w+\s*=", line)  # on trouve la clés
                 if found:
                     cle = found[0].replace(' ', '')[:-1]  # on enleve le = et l'espace
                     # si la cle dans customDict est à 1 et que ce n'est pas pour un type @misc on enlève
+                    if cle not in customdict:
+                        customdict[cle] = 0
                     if customdict[cle] and not (lastat == '@misc'):
                         print('removed : ' + line)
                     else:
@@ -53,8 +57,6 @@ def cleandict(file, customdict=None):
                 else:
                     newf.write(line)
 
-        newf.close()
-        f.close()
         os.remove(file)
         os.renames(file + 'new', file)
     except IOError as e:
@@ -83,7 +85,7 @@ class CleanBibUi(QMainWindow):
 
         # Charge le last open file
         try:
-            with open('config', 'r') as f:
+            with open('config', 'r', encoding="utf-8") as f:
                 fname = f.read()
             if os.path.isfile(fname):
                 self.fname = fname
@@ -106,7 +108,7 @@ class CleanBibUi(QMainWindow):
         """Main Gui Program"""
         dia = QtGui.QFileDialog()
         self.fname = QtGui.QFileDialog.getOpenFileName(dia, 'Open file', '~')
-        with open('config', 'w+') as f:
+        with open('config', 'w+' , encoding="utf-8") as f:
             f.write(self.fname)
 
         if os.path.isfile(self.fname):
@@ -138,7 +140,7 @@ class CleanBibUi(QMainWindow):
             self.msg_box_missing_file()
             return
 
-        with open(self.fname, 'r') as f:
+        with open(self.fname, 'r', encoding="utf-8") as f:
             self.ui.textEdit_bibtex.setText(f.read())  # on rempli le textbox avec le fichier
             f.seek(0)
             for line in f:
@@ -183,9 +185,9 @@ class CleanBibUi(QMainWindow):
     def load_default():
         """ Load the file containing the default checked box """
         try:
-            f = open('Default', 'r')
+            f = open('Default', 'r', encoding="utf-8")
         except IOError:
-            f = open('Default', 'w+')
+            f = open('Default', 'w+', encoding="utf-8")
             f.write('url\nisbn\nissn\nfile\ndoi\nabstract\nurldate')
             f.seek(0, 0)
 

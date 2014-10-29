@@ -9,12 +9,12 @@ def read(fname):
 setup(
     name='bibCleaner',
     packages=find_packages(),
-    version='0.2',
+    version='0.2.1',
     description='bibtex file cleaner',
     author='Alexis Fortin-Côté',
     author_email='alexisfcote@gmail.com',
     long_description=read('README.txt'),
-    url='https://pypi.python.org/pypi',
+    url='https://github.com/alexisfcote/BibCleaner',
     keywords="bibtex latex bib clean",
     license='GPLv3',
     classifiers=[

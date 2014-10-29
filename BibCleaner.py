@@ -26,6 +26,7 @@ import os
 import sys
 from PyQt4.QtGui import QApplication, QMainWindow, QMessageBox
 from PyQt4 import QtCore, QtGui
+import BibCleaner
 from uiBibCleaner import Ui_main
 
 
@@ -66,7 +67,7 @@ class CleanBibUi(QMainWindow):
         QMainWindow.__init__(self, parent)
         self.ui = Ui_main()
         self.setWindowTitle('Icon')
-        self.setWindowIcon(QtGui.QIcon('favicon.ico'))
+        self.setWindowIcon(QtGui.QIcon('favicon.png'))
         self.ui.setupUi(self)
 
         # Variables

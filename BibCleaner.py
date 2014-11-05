@@ -195,7 +195,7 @@ class CleanBibUi(QMainWindow):
             f = open('Default', 'r', encoding="utf-8")
         except IOError:
             f = open('Default', 'w+', encoding="utf-8")
-            f.write('url\nisbn\nissn\nfile\ndoi\nabstract\nurldate')
+            f.write('url\nfile\nabstract\nurldate\nannote')
             f.seek(0, 0)
 
         list_default = []

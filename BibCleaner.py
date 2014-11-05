@@ -40,21 +40,28 @@ def cleandict(file, customdict=None):
     try:
         with open(file, encoding="utf-8") as f, open(file + 'new', 'w', encoding="utf-8") as newf:
             lastat = []
+            removing = False  # removing is set to 1 until a newkey is found. It is used to remove multiline entries
             for line in f:
                 if line[0] == '@':
                     lastat = re.findall("@\w+", line)[0]
+                    removing = False
+
+                if line[0] == '}' and not re.findall(",", line):  # do not remove if the line contains just a } and no ,
+                    removing = False
 
                 found = re.findall("\w+\s*=", line)  # on trouve la clés
                 if found:
+                    removing = False
                     cle = found[0].replace(' ', '')[:-1]  # on enleve le = et l'espace
                     # si la cle dans customDict est à 1 et que ce n'est pas pour un type @misc on enlève
                     if cle not in customdict:
                         customdict[cle] = 0
                     if customdict[cle] and not (lastat == '@misc'):
                         print('removed : ' + line)
+                        removing = True
                     else:
                         newf.write(line)
-                else:
+                elif not removing:
                     newf.write(line)
 
         os.remove(file)

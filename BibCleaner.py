@@ -105,6 +105,7 @@ class CleanBibUi(QMainWindow):
         QtCore.QObject.connect(self.ui.pushButton_load, QtCore.SIGNAL("clicked()"), self.file_dialog)
         self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.uiclean)
         QtCore.QObject.connect(self.ui.FileEdit, QtCore.SIGNAL("returnPressed()"), self.typed_filename)
+        QtCore.QObject.connect(self.ui.pushButto_reload, QtCore.SIGNAL("clicked()"), self.refresh)
 
     def typed_filename(self):
         """ When changing filename from the textbox update self.fname """

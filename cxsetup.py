@@ -17,7 +17,7 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(name="BibCleaner",
-      version="0.3",
+      version="0.4",
       description='bibtex file cleaner',
       author='Alexis Fortin-Côté',
       author_email='alexisfcote@gmail.com',

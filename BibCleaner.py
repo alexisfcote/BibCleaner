@@ -24,6 +24,8 @@
 import re
 import os
 import sys
+import time
+from threading import Thread
 from PyQt4.QtGui import QApplication, QMainWindow, QMessageBox
 from PyQt4 import QtCore, QtGui
 from uiBibCleaner import Ui_main
@@ -81,6 +83,9 @@ class CleanBibUi(QMainWindow):
 
         # Variables
         self.fname = ''
+        self.t = Thread(target=self.clean_timer)
+        self.running = True
+        self.t.deamon = True
         # ui custom checkbox
         self.ui.cblist = []
 
@@ -103,7 +108,7 @@ class CleanBibUi(QMainWindow):
 
         #Connection
         QtCore.QObject.connect(self.ui.pushButton_load, QtCore.SIGNAL("clicked()"), self.file_dialog)
-        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.uiclean)
+        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.apply)
         QtCore.QObject.connect(self.ui.FileEdit, QtCore.SIGNAL("returnPressed()"), self.typed_filename)
         QtCore.QObject.connect(self.ui.pushButto_reload, QtCore.SIGNAL("clicked()"), self.refresh)
 
@@ -116,7 +121,7 @@ class CleanBibUi(QMainWindow):
         """Main Gui Program"""
         dia = QtGui.QFileDialog()
         self.fname = QtGui.QFileDialog.getOpenFileName(dia, 'Open file', '~')
-        with open('config', 'w+' , encoding="utf-8") as f:
+        with open('config', 'w+', encoding="utf-8") as f:
             f.write(self.fname)
 
         if os.path.isfile(self.fname):
@@ -131,6 +136,16 @@ class CleanBibUi(QMainWindow):
             self.refresh()
         else:
             self.msg_box_missing_file()
+
+    def apply(self):
+        self.uiclean()
+        self.t.start()
+
+    def clean_timer(self):
+        while self.running:
+            cleandict(self.fname, self.cles)
+            print("Cleaned again " + self.fname)
+            time.sleep(1)
 
     @staticmethod
     def msg_box_missing_file():
@@ -214,7 +229,9 @@ def main():
     app = QApplication(sys.argv)
     myapp = CleanBibUi()
     myapp.show()
-    sys.exit(app.exec_())
+    #sys.exit(app.exec_())
+    app.exec_()
+    myapp.running = False
 
 
 if __name__ == '__main__':

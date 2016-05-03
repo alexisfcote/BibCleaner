@@ -20,7 +20,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 import re
 import os
 import sys
@@ -32,7 +32,8 @@ from uiBibCleaner import Ui_main
 
 
 def cleandict(file, customdict=None):
-    """ Function that removes lines from a given file for which the starting word is contained in the passed dict
+    """ Function that removes lines from a given file for which the starting 
+    word is contained in the passed dict
     :param file: Filename of the .bib to modify
     :param customdict: Dictionary of the tags to remove
     :return: none
@@ -84,8 +85,7 @@ class CleanBibUi(QMainWindow):
         # Variables
         self.fname = ''
         self.t = Thread(target=self.clean_timer)
-        self.running = True
-        self.t.deamon = True
+        self.t.daemon = True
         # ui custom checkbox
         self.ui.cblist = []
 
@@ -139,10 +139,11 @@ class CleanBibUi(QMainWindow):
 
     def apply(self):
         self.uiclean()
-        self.t.start()
+        if not self.t.is_alive():
+            self.t.start()
 
     def clean_timer(self):
-        while self.running:
+        while True:
             cleandict(self.fname, self.cles)
             print("Cleaned again " + self.fname)
             time.sleep(1)
@@ -159,6 +160,11 @@ class CleanBibUi(QMainWindow):
     def refresh(self):
         """ refresh and load the file and chekboxes """
         newcles = dict()
+        # on garde les clé par default
+        default = self.load_default()
+        for cle in default:
+            newcles[cle] = 1
+        
         if not os.path.isfile(self.fname):
             self.msg_box_missing_file()
             return
@@ -229,9 +235,7 @@ def main():
     app = QApplication(sys.argv)
     myapp = CleanBibUi()
     myapp.show()
-    #sys.exit(app.exec_())
     app.exec_()
-    myapp.running = False
 
 
 if __name__ == '__main__':

@@ -65,3 +65,9 @@ test/
 
 #Vim
 *.swap
+
+*.build/
+*.dist/
+BibCleaner.exe
+bibLaunch.bat
+python34.dll

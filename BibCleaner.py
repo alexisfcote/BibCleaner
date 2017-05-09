@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------------
 # Name:        CleanBib
 # Purpose: Remove unwanted keys from a .bib file
@@ -26,13 +27,17 @@ import os
 import sys
 import time
 from threading import Thread
-from PyQt4.QtGui import QApplication, QMainWindow, QMessageBox
-from PyQt4 import QtCore, QtGui
+
+
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5 import QtGui, QtWidgets
 from uiBibCleaner import Ui_main
 
 
+
+
 def cleandict(file, customdict=None):
-    """ Function that removes lines from a given file for which the starting 
+    """ Function that removes lines from a given file for which the starting
     word is contained in the passed dict
     :param file: Filename of the .bib to modify
     :param customdict: Dictionary of the tags to remove
@@ -60,7 +65,10 @@ def cleandict(file, customdict=None):
                     if cle not in customdict:
                         customdict[cle] = 0
                     if customdict[cle] and not (lastat == '@misc'):
-                        print('removed : ' + line)
+                        try:
+                            print('removed : ' + str(line))
+                        except:
+                            pass
                         removing = True
                     else:
                         newf.write(line)
@@ -107,10 +115,10 @@ class CleanBibUi(QMainWindow):
             pass
 
         #Connection
-        QtCore.QObject.connect(self.ui.pushButton_load, QtCore.SIGNAL("clicked()"), self.file_dialog)
-        self.ui.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.apply)
-        QtCore.QObject.connect(self.ui.FileEdit, QtCore.SIGNAL("returnPressed()"), self.typed_filename)
-        QtCore.QObject.connect(self.ui.pushButto_reload, QtCore.SIGNAL("clicked()"), self.refresh)
+        self.ui.pushButton_load.clicked.connect(self.file_dialog)
+        self.ui.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply)
+        self.ui.FileEdit.returnPressed.connect(self.typed_filename)
+        self.ui.pushButto_reload.clicked.connect(self.refresh)
 
     def typed_filename(self):
         """ When changing filename from the textbox update self.fname """
@@ -119,8 +127,8 @@ class CleanBibUi(QMainWindow):
 
     def file_dialog(self):
         """Main Gui Program"""
-        dia = QtGui.QFileDialog()
-        self.fname = QtGui.QFileDialog.getOpenFileName(dia, 'Open file', '~')
+        dia = QtWidgets.QFileDialog()
+        self.fname = QtWidgets.QFileDialog.getOpenFileName(dia, 'Open file', '~')[0]
         with open('config', 'w+', encoding="utf-8") as f:
             f.write(self.fname)
 
@@ -164,7 +172,7 @@ class CleanBibUi(QMainWindow):
         default = self.load_default()
         for cle in default:
             newcles[cle] = 1
-        
+
         if not os.path.isfile(self.fname):
             self.msg_box_missing_file()
             return
@@ -195,7 +203,7 @@ class CleanBibUi(QMainWindow):
         i = 0
         # on crée les checkboxes des cles trouvés
         for cle in sorted(self.cles):
-            self.ui.cblist.append(QtGui.QCheckBox(cle, self.ui.groupBox_custom))
+            self.ui.cblist.append(QtWidgets.QCheckBox(cle, self.ui.groupBox_custom))
             self.ui.cblist[i].setObjectName(cle)
             if self.cles[cle]:
                 self.ui.cblist[i].setChecked(True)
